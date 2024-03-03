@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string("description");
             $table->string("location");
-            $table->integer('places');
+            $table->integer('seats');
             $table->string('image',255)->nullable();
             $table->timestamps();
             $table->unsignedBigInteger('category_id');

@@ -35,10 +35,11 @@ class GoogleController extends Controller
                     'oauth_type' => static::GOOGLE_TYPE,
                     'password' => Hash::make($user->id),
                 ]);
+                dd($newUser);
 
                 Auth::login($newUser);
-
-                return redirect()->route('dashboard');
+                
+                return redirect()->route('home');
             }
         } catch (Exception $e) {
             return redirect()->route('login');
