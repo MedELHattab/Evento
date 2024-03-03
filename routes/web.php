@@ -29,17 +29,14 @@ Route::get('/dashboard', function () {
 Route::get('/auth/google/redirect', [GoogleController::class, 'handleGoogleRedirect'])->name('google');
 Route::get('/auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);
 Route::middleware('auth')->group(function () {
-
+    Route::get('/users', [UserController::class, 'index'])->name('users.index');
+    Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+    Route::get('/users/archive', [UserController::class, 'archive'])->name('users.archive');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::get('/home', [HomeController::class, 'index']);
-    Route::get('/arvhive',[CategoryController::class,'archive'])->name('categories.archive');
-    Route::resource("users", UserController::class, [
-        'names' => [
-            'index' => 'users'
-        ]
-    ]);
+    Route::get('/home', [HomeController::class, 'index'])->name('home');
+    Route::get('/categories/archive', [CategoryController::class, 'archive'])->name('categories.archive');
     Route::resource("categories", CategoryController::class, [
         'names' => [
             'index' => 'categories'

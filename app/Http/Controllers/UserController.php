@@ -19,10 +19,9 @@ class UserController extends Controller
         return redirect()->route('users')
                         ->with('success','user deleted successfully');
     }
-
     public function archive(){
-        $users = User::onlyTrashed()->get();
-
-        return view('users.archive',compact('users'));
+        $users = User::onlyTrashed()->latest()->paginate(5);
+        return view('users.archive',compact('users'))
+                    ->with('i', (request()->input('page', 1) - 1) * 5);
     }
 }
