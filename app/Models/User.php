@@ -22,6 +22,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'oauth_id',
+        'oauth_type'
     ];
     protected $dates = ['deleted_at'];
 
@@ -44,4 +46,17 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function events()
+    {
+        return $this->hasMany(Event::class,'creatred by', 'id');
+    }
+
+    // public function reservations(){
+    //     return $this->belongsToMany(Reservation::class, 'user_reservation', 'user_id', 'reservation_id');
+    // }
+
+    public function reservations(){
+        return $this->hasMany(Reservation::class, 'user_id', 'id');
+    }
 }
