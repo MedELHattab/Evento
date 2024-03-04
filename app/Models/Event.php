@@ -9,10 +9,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Event extends Model
 {
     use HasFactory,SoftDeletes;
-    protected $fillable=['title','location','seats', 'description','created by','date', 'category_id', 'image'];
+    protected $fillable=['name','location','seats', 'description','created_by','date', 'category_id', 'image','price','type'];
     protected $dates = ['deleted_at'];
 
-    public function company(){
+    public function category(){
         return $this->belongsTo(Category::class);
     }
 
