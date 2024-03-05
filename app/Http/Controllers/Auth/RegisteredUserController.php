@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+use Spatie\Permission\Models\Role;
 
 class RegisteredUserController extends Controller
 {
@@ -34,6 +35,7 @@ class RegisteredUserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'user_role' => ['required', 'in:organiser,spectator'], // Ensure 'user_role' is in the allowed values
         ]);
 
         $user = User::create([
@@ -41,6 +43,13 @@ class RegisteredUserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
+
+        $roleName = $request->user_role;
+        $role = Role::where('name', $roleName)->first();
+
+        if ($role) {
+            $user->assignRole($role);
+        }
 
         event(new Registered($user));
 

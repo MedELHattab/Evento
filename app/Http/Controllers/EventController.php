@@ -6,6 +6,8 @@ use App\Models\Category;
 use App\Models\Event;
 use App\Http\Requests\StoreEventRequest;
 use App\Http\Requests\UpdateEventRequest;
+use App\Models\User;
+use Illuminate\Http\Request;
 
 class EventController extends Controller
 {
@@ -24,9 +26,24 @@ class EventController extends Controller
 
     public function allEvents()
     {
-        $events = Event::all();
+        $events = Event::latest()->paginate(5);
         $categories = Category::all();
-        return view('AllEvents', compact('events', 'categories'));
+        $users = User::all();
+        // dd($users);
+        return view('events.AllEvents', compact('events', 'categories', 'users'))
+            ->with('i', (request()->input('page', 1) - 1) * 5);
+    }
+
+    public function changeStatus(Request $request, Event $event)
+    {
+        // dd($request->all());
+        $status = $request->validate([
+            'status' => ['required', 'in:pending,accepted,refused'],
+        ]);
+
+        $event->update(['status' => $status['status']]);
+    
+        return redirect()->back()->with('success', 'Status updated successfully');
     }
 
     /**
@@ -155,23 +172,4 @@ class EventController extends Controller
             ->with('i', (request()->input('page', 1) - 1) * 5);
     }
 
-    // public function myapplications()
-    // {
-    //     $announcements = auth()->user()->announcements()->latest()->paginate(5);
-
-
-    //     return view('announcements.myapplications', compact('announcements'))
-    //         ->with('i', (request()->input('page', 1) - 1) * 5);
-    // }
-
-    // public function apply(Request $request, Announcements $announcement)
-    // {
-    //     $user = auth()->user();
-
-    //     // Attach the single announcement_id to the user's announcements
-    //     $user->announcements()->attach($announcement->id);
-
-    //     return redirect()->route('announcements.show', compact('announcement'))
-    //         ->with('success', 'Thank you for applying.');
-    // }
 }

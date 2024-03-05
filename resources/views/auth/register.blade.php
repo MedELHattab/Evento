@@ -65,7 +65,17 @@
 
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
         </div>
-
+        <div class="flex justify-between mt-4">
+            <div class="flex items-center px-4 border border-gray-200 rounded dark:border-gray-700">
+                <input id="organiser" type="radio" value="organiser" name="user_role" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                <label for="organiser" class="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Organiser</label>
+            </div>
+            <div class="flex items-center px-4 border border-gray-200 rounded dark:border-gray-700">
+                <input checked id="spectator" type="radio" value="spectator" name="user_role" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                <label for="spectator" class="w-full py-4 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Spectator</label>
+            </div>
+        </div>
+        
         <div class="flex items-center justify-end mt-4">
             <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 href="{{ route('login') }}">
