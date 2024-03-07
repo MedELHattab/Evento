@@ -36,7 +36,7 @@ class EventController extends Controller
 
     public function changeStatus(Request $request, Event $event)
     {
-        // dd($request->all());
+        
         $status = $request->validate([
             'status' => ['required', 'in:pending,accepted,refused'],
         ]);
@@ -82,6 +82,14 @@ class EventController extends Controller
             'image' => $imageFileName,
             'created_by' => auth()->id(),
         ]);
+
+        if ($request->type === 'automatic') {
+            $event->reservations()->update(['status' => 'accepted']);
+        } else {
+            
+            $event->reservations()->update(['status' => 'pending']);
+        }
+
 
         return redirect()->route('events')->with('success', 'Event created successfully.');
     }
@@ -140,6 +148,13 @@ class EventController extends Controller
             $path = 'uploads/events/';
             $file->move($path, $fileName);
             $data['image'] = $fileName;
+        }
+
+        if ($request->type === 'automatic') {
+            $event->reservations()->update(['status' => 'accepted']);
+        } else {
+            
+            $event->reservations()->update(['status' => 'pending']);
         }
 
         $event->update($data);

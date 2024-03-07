@@ -4,7 +4,9 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\MollieController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -36,8 +38,15 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/home', [HomeController::class, 'index'])->name('home');
-    Route::get('/events/allEvents',[EventController::class, 'allEvents'])->name('events.allEvents');
-    Route::put('/events/changeStatus/{event}',[EventController::class, 'changeStatus'])->name('events.changeStatus');
+    Route::post('/reservations/book', [ReservationController::class, 'book'])->name('reservations.book');
+    Route::get('/events/{event}/reservations', [ReservationController::class, 'index'])->name('reservations.index');
+    Route::get('/Myreservations', [ReservationController::class, 'myReservations'])->name('Myreservations');
+    Route::post('mollie/{reservation}', [MollieController::class, 'mollie'])->name('mollie');
+    Route::get('success', [MollieController::class, 'success'])->name('success');
+    Route::get('cancel', [MollieController::class, 'cancel'])->name('cancel');
+    Route::put('/reservations/changeStatus/{reservation}', [ReservationController::class, 'changeStatus'])->name('reservations.changeStatus');
+    Route::get('/events/allEvents', [EventController::class, 'allEvents'])->name('events.allEvents');
+    Route::put('/events/changeStatus/{event}', [EventController::class, 'changeStatus'])->name('events.changeStatus');
     Route::get('/events/archive', [EventController::class, 'archive'])->name('events.archive');
     Route::get('/categories/archive', [CategoryController::class, 'archive'])->name('categories.archive');
     Route::resource("categories", CategoryController::class, [
