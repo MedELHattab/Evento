@@ -43,8 +43,26 @@
                     <p class="subtitle">Latest Articles</p>
                     <h2>Our Recent Blog Post</h2>
                 </div>
+                <div class="flex p-4 lg:px-10 flex-col md:flex-row gap-3">
+                    <div class="flex w-full ">
+                        <input type="text" id="search_input" placeholder="Search for the tool you like"
+                            class="w-full  px-3 h-10 rounded-l border-2 border-blue-500 focus:outline-none focus:border-blue-500"
+                            >
+                        <button type="submit" class="bg-blue-500 text-white rounded-r px-2 md:px-3 py-0 md:py-1">Search</button>
+                    </div>
+                    <select id="category" name="category"
+                        class="w-3/12 h-10 border-2 border-blue-500 focus:outline-none focus:border-blue-500 text-blue-500 rounded px-2 md:px-3 py-0 md:py-1 tracking-wider">
+                        <option value="0" selected>All</option>
+                
+                        @foreach ($categories as $category)
+                        <option value="{{$category->id}}">{{$category->name}}</option>
+                
+                        @endforeach
+                
+                    </select>
+                </div>
                 <div class="blog__wrapper">
-                    <div class="row g-4">
+                    <div class="row g-4" id="place_result">
                         @foreach ($events as $event)
                         <div class="col-lg-4 col-md-6">
                             <div class="blog__item" data-aos="fade-up" data-aos-duration="900">
@@ -109,4 +127,5 @@
 <script src="{{asset('assets/js/lightcase.js')}}"></script>
 <script src="{{asset('assets/js/purecounter_vanilla.js')}}"></script>
 <script src="{{asset('assets/js/custom.js')}}"></script>
+<script src="{{asset('assets/js/search.js')}}"></script>
 </body>

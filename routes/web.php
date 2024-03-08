@@ -7,6 +7,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MollieController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\TicketController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -30,6 +31,9 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 Route::get('/auth/google/redirect', [GoogleController::class, 'handleGoogleRedirect'])->name('google');
 Route::get('/auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);
+Route::get("/search",[HomeController::class,"search"])->name("search");
+
+
 Route::middleware('auth')->group(function () {
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
     Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
@@ -44,6 +48,7 @@ Route::middleware('auth')->group(function () {
     Route::post('mollie/{reservation}', [MollieController::class, 'mollie'])->name('mollie');
     Route::get('success', [MollieController::class, 'success'])->name('success');
     Route::get('cancel', [MollieController::class, 'cancel'])->name('cancel');
+    Route::get('/ticket/{ticketCode}', [TicketController::class,'show'])->name('ticket.show');
     Route::put('/reservations/changeStatus/{reservation}', [ReservationController::class, 'changeStatus'])->name('reservations.changeStatus');
     Route::get('/events/allEvents', [EventController::class, 'allEvents'])->name('events.allEvents');
     Route::put('/events/changeStatus/{event}', [EventController::class, 'changeStatus'])->name('events.changeStatus');

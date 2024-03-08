@@ -90,7 +90,9 @@ class MollieController extends Controller
             }
 
             $obj->price = $price;
+            $obj->ticket_code = $ticketCode;
             $obj->save();
+            return redirect()->route('ticket.show', ['ticketCode' => $ticketCode]);
         } else {
             return redirect()->route('cancel');
         }

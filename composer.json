@@ -6,12 +6,15 @@
     "license": "MIT",
     "require": {
         "php": "^8.1",
+        "barryvdh/laravel-dompdf": "^2.0",
+        "barryvdh/laravel-snappy": "^1.0",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.3",
         "laravel/socialite": "^5.12",
         "laravel/tinker": "^2.8",
         "mollie/laravel-mollie": "^2.25",
+        "picqer/php-barcode-generator": "*",
         "ramsey/uuid": "^4.7",
         "realrashid/sweet-alert": "^7.1",
         "spatie/laravel-permission": "^6.4"
@@ -33,6 +36,7 @@
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
         }
+        
     },
     "autoload-dev": {
         "psr-4": {
