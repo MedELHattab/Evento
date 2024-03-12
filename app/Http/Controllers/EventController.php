@@ -6,8 +6,10 @@ use App\Models\Category;
 use App\Models\Event;
 use App\Http\Requests\StoreEventRequest;
 use App\Http\Requests\UpdateEventRequest;
+use App\Models\Reservation;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class EventController extends Controller
 {
@@ -16,11 +18,20 @@ class EventController extends Controller
      */
     public function index()
     {
+
+        $user = Auth::user();
+
+        // Check if the user is authenticated and has the required roles
+        if (!$user || !$user->hasAnyRole(['admin', 'organiser'])) {
+            abort(403, 'Unauthorized action.');
+        }
         $events = auth()->user()->events()->with('category')->latest()->paginate(5);
 
         $categories = Category::all();
+        $reservations=Reservation::all();
+        $counts=Reservation::count();
 
-        return view('events.index', compact('events', 'categories'))
+        return view('events.index', compact('events', 'categories','counts','reservations'))
             ->with('i', (request()->input('page', 1) - 1) * 5);
     }
 
@@ -50,7 +61,12 @@ class EventController extends Controller
      * Show the form for creating a new resource.
      */
     public function create()
-    {
+    {  $user = Auth::user();
+
+        // Check if the user is authenticated and has the required roles
+        if (!$user || !$user->hasAnyRole(['admin', 'organiser'])) {
+            abort(403, 'Unauthorized action.');
+        }
         $categories = Category::all();
         return view('events.create', compact('categories'))
             ->with('i', (request()->input('page', 1) - 1) * 5);
@@ -61,6 +77,12 @@ class EventController extends Controller
      */
     public function store(StoreEventRequest $request)
     {
+        $user = Auth::user();
+
+        // Check if the user is authenticated and has the required roles
+        if (!$user || !$user->hasAnyRole(['admin', 'organiser'])) {
+            abort(403, 'Unauthorized action.');
+        }
         $imageFileName = null;
 
         if ($request->hasFile('image')) {
@@ -101,6 +123,8 @@ class EventController extends Controller
     public function show($id)
     {
         $event = Event::find($id);
+        $categories = Category::all();
+        $users=User::all();
 
         // You might want to add some error handling in case the announcement is not found
         if (!$event) {
@@ -109,7 +133,7 @@ class EventController extends Controller
 
         $categories = Category::all();
 
-        return view('events.show', compact('event', 'categories'));
+        return view('events.show', compact('event', 'categories','users'));
     }
     /**
      * Show the form for editing the specified resource.
@@ -117,6 +141,12 @@ class EventController extends Controller
     public function edit(Event $event)
     {
 
+        $user = Auth::user();
+
+        // Check if the user is authenticated and has the required roles
+        if (!$user || !$user->hasAnyRole(['admin', 'organiser'])) {
+            abort(403, 'Unauthorized action.');
+        }
         $categories = Category::all();
 
         return view('events.edit', compact('event', 'categories'))
@@ -128,6 +158,12 @@ class EventController extends Controller
      */
     public function update(UpdateEventRequest $request, Event $event)
     {
+        $user = Auth::user();
+
+        // Check if the user is authenticated and has the required roles
+        if (!$user || !$user->hasAnyRole(['admin', 'organiser'])) {
+            abort(403, 'Unauthorized action.');
+        }
 
         $data = [
             'name' => $request->name,
@@ -167,7 +203,13 @@ class EventController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy(Event $event)
-    {
+    {  
+        $user = Auth::user();
+
+        // Check if the user is authenticated and has the required roles
+        if (!$user || !$user->hasAnyRole(['admin', 'organiser'])) {
+            abort(403, 'Unauthorized action.');
+        }
         $event->delete();
 
         return redirect()->route('events')
@@ -176,6 +218,12 @@ class EventController extends Controller
 
     public function archive()
     {
+        $user = Auth::user();
+
+        // Check if the user is authenticated and has the required roles
+        if (!$user || !$user->hasAnyRole(['admin', 'organiser'])) {
+            abort(403, 'Unauthorized action.');
+        }
         $events = Event::where('created_by', auth()->id())
             ->with('category')
             ->latest()

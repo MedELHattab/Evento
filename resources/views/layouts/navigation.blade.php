@@ -11,11 +11,14 @@
                 </div>
 
                 <!-- Navigation Links -->
+                @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('organiser'))
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
                 </div>
+                @endif
+                @if (auth()->user()->hasRole('admin'))
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('users.index')" :active="request()->routeIs('users')">
                         {{ __('Users') }}
@@ -31,11 +34,15 @@
                         {{ __('All Events') }}
                     </x-nav-link>
                 </div>
+                
+                @endif
+                @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('organiser'))
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('events')" :active="request()->routeIs('events')">
                         {{ __('My Events') }}
                     </x-nav-link>
                 </div>
+                @endif
             </div>
 
             <!-- Settings Dropdown -->

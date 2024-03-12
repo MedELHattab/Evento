@@ -1,20 +1,20 @@
-function confurmDelete(e) {
-    e.preventDefault();
-    Swal.fire({
-        title: "Are you sure?",
-        text: "You won't be able to revert this!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, delete it!"
-    }).then((result) => {
-        if (result.isConfirmed) {
+// function confurmDelete(e) {
+//     e.preventDefault();
+//     Swal.fire({
+//         title: "Are you sure?",
+//         text: "You won't be able to revert this!",
+//         icon: "warning",
+//         showCancelButton: true,
+//         confirmButtonColor: "#3085d6",
+//         cancelButtonColor: "#d33",
+//         confirmButtonText: "Yes, delete it!"
+//     }).then((result) => {
+//         if (result.isConfirmed) {
 
-            e.target.closest('form').submit();
-        }
-    });
-}
+//             e.target.closest('form').submit();
+//         }
+//     });
+// }
 $(document).ready(function () {
     document.getElementById('search_input').addEventListener('input', fetchData);
     document.getElementById('category').addEventListener('change', fetchData);
@@ -89,37 +89,30 @@ $(document).ready(function () {
             <div class="col-lg-4 col-md-6">
             <div class="blog__item" data-aos="fade-up" data-aos-duration="900">
                 <div class="blog__inner">
-                    <div class="blog__thumb">
-                        <img src="{{ asset('uploads/events/'. ${event.image} }}" alt="Blog Images">
+                    <div class="blog__thumb h-60">
+                        <img src="http://127.0.0.1:8000/uploads/events/${event.image}" alt="Blog Images">
                     </div>
                     <div class="blog__content">
                         <div class="blog__content-top">
-                            <span class="blog__meta-tag">@foreach ($categories as $category)
-                                @if ($category->id === $event->category_id)
-                                    {{ $category->name }}
-                                @endif
-                            @endforeach</span>
-                            <h4><a href="{{ route('events.show', $event) }}">{{$event->name}}</a></h4>
+                            <span class="blog__meta-tag">${event.category.name}</span>
+                            <h4><a href="http://127.0.0.1:8000/events/${event.id}">${event.name}</a></h4>
                             <ul class="blog__meta d-flex flex-wrap align-items-center">
                                 <li class="blog__meta-author">
-                                    <a href="#"><span><i class="fa-solid fa-user"></i></span> @foreach ($users as $user)
-                                        @if ($user->id === $event->created_by)
-                                            {{ $user->name }}
-                                        @endif
-                                    @endforeach</a>
+                                    <a href="http://127.0.0.1:8000/events/${event.id}"><span><i class="fa-solid fa-user"></i></span> 
+                                    
                                 </li>
                                 <li class="blog__meta-date">
-                                    <a href="#"><span><i class="fa-solid fa-calendar-days"></i></span>
+                                    <a href="http://127.0.0.1:8000/events/${event.id}"><span><i class="fa-solid fa-calendar-days"></i></span>
                                     ${event.date}</a>
                                 </li>
                             </ul>
                         </div>
                         <p>${event.description}</p>
                         <div class="blog__content-bottom">
-                            <a href="blog-single.html" class="text-btn">Read More</a>
-                            <form method="POST" action="{{ route('reservations.book') }}">
-                                @csrf
-                                <input type="hidden" name="event_id" value="{{ $event->id }}">
+                            <a href="http://127.0.0.1:8000/events/${event.id}" class="text-btn">Read More</a>
+                            <form method="POST" action="http://127.0.0.1:8000/reservations/book">
+                                
+                                <input type="hidden" name="event_id" value="${event.id}">
                                 <button type="submit" class="btn btn-primary">Create Reservation</button>
                             </form>
                         </div>

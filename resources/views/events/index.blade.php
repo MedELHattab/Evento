@@ -83,7 +83,10 @@
                                 Category
                             </th>
                             <th scope="col" class="px-6 py-3">
-                                type
+                                Type
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                ¨Payments
                             </th>
                             <th scope="col" class="px-6 py-3">
                                 Action
@@ -128,6 +131,9 @@
                                 <td class="px-6 py-4">
                                     {{ $event->type }}
                                </td>
+                               <td class="px-6 py-4">
+                                {{ $event->reservations->flatMap->payments->count() }}
+                           </td>
                                 <td class="px-6 py-4">
                                     <a href="{{ url('events/'.$event->id.'/edit') }}"
                                         class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>

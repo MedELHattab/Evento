@@ -1,9 +1,9 @@
 <!-- ================> Footer section start here <================== -->
-<footer class="footer" style="background-image:url(assets/images/footer/bg.png) ;">
+<footer class="footer" style="background-image:url({{asset('assets/images/footer/bg.png')}}) ;">
     <div class="footer__wrapper padding-top padding-bottom">
         <div class="container">
             <div class="footer__content text-center">
-                <a class="mb-4 d-inline-block" href="index.html"><img src="assets/images/logo/logo.png"
+                <a class="mb-4 d-inline-block" href="index.html"><img src="{{asset('assets/images/logo/logo.png')}}"
                         alt="Logo"></a>
                 <ul class="social justify-content-center">
                     <li class="social__item">

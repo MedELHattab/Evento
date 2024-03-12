@@ -6,9 +6,11 @@ use App\Models\Reservation;
 use App\Http\Requests\StoreReservationRequest;
 use App\Http\Requests\UpdateReservationRequest;
 use App\Models\Event;
+use App\Models\Payment;
 use App\Models\User;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Support\Facades\Auth;
 
 class ReservationController extends Controller
 {
@@ -17,6 +19,12 @@ class ReservationController extends Controller
      */
     public function index($eventId)
     {
+        $user = Auth::user();
+
+        // Check if the user is authenticated and has the required roles
+        if (!$user || !$user->hasAnyRole(['admin', 'organiser'])) {
+            abort(403, 'Unauthorized action.');
+        }
         $event = Event::findOrFail($eventId);
         $reservations = Reservation::where('event_id', $event->id)->latest()->paginate(5);
         $users = User::all();
@@ -27,17 +35,17 @@ class ReservationController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-    }
+    // public function create()
+    // {
+    // }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreReservationRequest $request)
-    {
-        //
-    }
+    // /**
+    //  * Store a newly created resource in storage.
+    //  */
+    // public function store(StoreReservationRequest $request)
+    // {
+    //     //
+    // }
 
     public function book(Request $request, Reservation $reservation)
     {
@@ -51,7 +59,7 @@ class ReservationController extends Controller
         } else {
             Reservation::create([
                 'number' => 1,
-                'status' => 'your_value',
+                // 'status' => 'pending',
                 'user_id' => auth()->user()->id,
                 'event_id' => $eventId,
             ]);
@@ -81,6 +89,12 @@ class ReservationController extends Controller
 
     public function changeStatus(Request $request, Reservation $reservation)
     {
+        $user = Auth::user();
+
+        // Check if the user is authenticated and has the required roles
+        if (!$user || !$user->hasAnyRole(['admin', 'organiser'])) {
+            abort(403, 'Unauthorized action.');
+        }
         
         $status = $request->validate([
             'status' => ['required', 'in:pending,accepted,refused'],
@@ -93,8 +107,9 @@ class ReservationController extends Controller
 
     public function myReservations(){
         $reservations=Reservation::where('user_id', auth()->user()->id)->latest()->paginate(5);;
+        $payment=Payment::all();
         $events=Event::all();
-        return view('Myreservations',compact('reservations','events'))->with('i', (request()->input('page', 1) - 1) * 5);;
+        return view('Myreservations',compact('reservations','events','payment'))->with('i', (request()->input('page', 1) - 1) * 5);;
     }
 
 
@@ -102,13 +117,13 @@ class ReservationController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Reservation $reservation)
-    {
-        //
-    }
+    // public function show(Reservation $reservation)
+    // {
+    //     //
+    // }
 
-    public function destroy(Reservation $reservation)
-    {
-        //
-    }
+    // public function destroy(Reservation $reservation)
+    // {
+    //     //
+    // }
 }

@@ -41,11 +41,11 @@
             <div class="container">
                 <div class="section-header text-center" data-aos="fade-up" data-aos-duration="900">
                     <p class="subtitle">Latest Articles</p>
-                    <h2>Our Recent Blog Post</h2>
+                    <h2>Upcoming Events</h2>
                 </div>
                 <div class="flex p-4 lg:px-10 flex-col md:flex-row gap-3">
                     <div class="flex w-full ">
-                        <input type="text" id="search_input" placeholder="Search for the tool you like"
+                        <input type="text" id="search_input" placeholder="Search for the event"
                             class="w-full  px-3 h-10 rounded-l border-2 border-blue-500 focus:outline-none focus:border-blue-500"
                             >
                         <button type="submit" class="bg-blue-500 text-white rounded-r px-2 md:px-3 py-0 md:py-1">Search</button>
@@ -60,6 +60,16 @@
                         @endforeach
                 
                     </select>
+                    <div class="text-center ">
+
+                        <input id="startDate" class="border-2 border-gray-300 rounded px-3 py-2 w-48" type="date"
+                            placeholder="start  date">
+                    </div>
+                    <div class="text-center ">
+                
+                        <input id="endDate" class="border-2 border-gray-300 rounded px-3 py-2 w-48" type="date"
+                            placeholder="end date">
+                    </div>
                 </div>
                 <div class="blog__wrapper">
                     <div class="row g-4" id="place_result">
@@ -67,7 +77,7 @@
                         <div class="col-lg-4 col-md-6">
                             <div class="blog__item" data-aos="fade-up" data-aos-duration="900">
                                 <div class="blog__inner">
-                                    <div class="blog__thumb">
+                                    <div class="blog__thumb h-60">
                                         <img src="{{ asset('uploads/events/'. $event->image) }}" alt="Blog Images">
                                     </div>
                                     <div class="blog__content">
@@ -93,19 +103,29 @@
                                             </ul>
                                         </div>
                                         <p>{{$event->description}}</p>
-                                        <div class="blog__content-bottom">
-                                            <a href="blog-single.html" class="text-btn">Read More</a>
+                                          <div class="blog__content-bottom">
+                                            <a href="{{ route('events.show', $event) }}" class="text-btn">Read More</a>
+                                            @if ($event->seats==0)
+                                            <div class="sold-out-message">
+                                                <p class="text-red-500 font-bold">Sold Out</p>
+                                            </div>    
+                                        @else
                                             <form method="POST" action="{{ route('reservations.book') }}">
                                                 @csrf
                                                 <input type="hidden" name="event_id" value="{{ $event->id }}">
                                                 <button type="submit" class="btn btn-primary">Create Reservation</button>
                                             </form>
-                                        </div>
+                                        </div>  
+                                        @endif
+                                        
                                     </div>
                                 </div>
                             </div>
                         </div>
                         @endforeach
+                    </div>
+                    <div class="mt-9 p-3">
+                        {{ $events->links() }}
                     </div>
                     <div class="mt-5 text-center">
                         <a href="blog.html" class="default-btn move-right"><span>View more</span></a>
@@ -128,4 +148,15 @@
 <script src="{{asset('assets/js/purecounter_vanilla.js')}}"></script>
 <script src="{{asset('assets/js/custom.js')}}"></script>
 <script src="{{asset('assets/js/search.js')}}"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        flatpickr("#startDate", {
+            // Configuration options for Flatpickr
+            // You can customize the appearance and behavior here
+        });
+        flatpickr("#endDate", {
+            // Configuration options for Flatpickr
+            // You can customize the appearance and behavior here
+        });
+    </script>
 </body>

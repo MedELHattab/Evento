@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Event;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use App\Models\Payment;
@@ -92,6 +93,9 @@ class MollieController extends Controller
             $obj->price = $price;
             $obj->ticket_code = $ticketCode;
             $obj->save();
+            $event = Event::find(Reservation::find($payment->metadata->reservation_id)->event_id);
+            $event->seats -= $obj->quantity;
+            $event->save();
             return redirect()->route('ticket.show', ['ticketCode' => $ticketCode]);
         } else {
             return redirect()->route('cancel');

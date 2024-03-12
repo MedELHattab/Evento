@@ -78,12 +78,16 @@
 
                             </td>
                             <td>
-                              @if ($reservation->status == 'accepted')
-                              <form action="{{ route('mollie',$reservation)}}" method="post">
-                                @csrf
-                                <input type="text" name="reservation" value="{{ $reservation->id }}" hidden>
-                                <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-lg">Payment</button>
-                              </form>
+                                @if ($reservation->status == 'accepted')
+                                @if (isset($reservation->payments) && $reservation->payments->isNotEmpty())
+                                    <p class="text-green-500">Payment Successful</p>
+                                @else
+                                    <form action="{{ route('mollie', $reservation) }}" method="post">
+                                        @csrf
+                                        <input type="text" name="reservation" value="{{ $reservation->id }}" hidden>
+                                        <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-lg">Payment</button>
+                                    </form>
+                                @endif
                             @elseif ($reservation->status == 'pending')
                                 <p class="text-yellow-500">Wait, please...</p>
                             @elseif ($reservation->status == 'refused')

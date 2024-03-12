@@ -6,13 +6,18 @@ use App\Models\Category;
 use App\Models\Event;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
+
 
 class HomeController extends Controller
 {
     public function index()
     {   
-        $events =Event::latest()->paginate(5);
-
+        $events = Event::whereDate('date', '>', Carbon::today())
+                   ->where('status', 'accepted') 
+                   ->latest()
+                   ->paginate(5);
+        
         $categories = Category::all();
         $users=User::all();
         
